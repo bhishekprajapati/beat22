@@ -16,5 +16,39 @@ services:
       - ./services/auth/src:/app/services/auth/src
       - .pnpm-store:/app/.pnpm-store
 
+  upload: 
+    build:
+      args:
+        - WORKSPACE_ROOT=services
+        - WORKSPACE_NAME=upload
+      context: .
+      dockerfile: ./Dockerfile
+    env_file: ./services/upload/.env
+    environment:
+      - SERVER_ADDRESS=0.0.0.0
+      - SERVER_PORT=8080
+      - S3_REGION=us-east-1
+      - S3_ENDPOINT=http://minio:9000
+      - S3_CRED_ACCESS_KEY_ID=minioadmin
+      - S3_CRED_SECRET_ACCESS_KEY=minioadmin
+      - S3_FORCE_PATH_STYLE=true
+    ports:
+      - 8081:8080
+    volumes:
+      - ./services/upload/src:/app/services/upload/src
+      - .pnpm-store:/app/.pnpm-store
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - .minio-data:/data
+
 volumes:
+  .minio-data:
   .pnpm-store:
