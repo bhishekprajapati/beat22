@@ -7,15 +7,15 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import express from "express";
+import { fileTypeFromBuffer } from "file-type";
+import { StatusCodes } from "http-status-codes";
+import { nanoid } from "nanoid";
 import { pinoHttp } from "pino-http";
+import z from "zod";
 import env from "./env";
 import { logger } from "./logger";
 import { prisma } from "./middlewares/prisma";
 import { s3 } from "./s3";
-import z from "zod";
-import { StatusCodes } from "http-status-codes";
-import { nanoid } from "nanoid";
-import { fileTypeFromBuffer } from "file-type";
 
 logger.info("Initializing server...");
 
