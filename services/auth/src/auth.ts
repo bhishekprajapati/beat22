@@ -1,10 +1,10 @@
 import { ResultAsync } from "neverthrow";
 import { z } from "zod";
-import pkg from "../package.json";
-import env from "./env";
-import createAuth from "./lib/auth";
-import { Password } from "./password";
-import { email, password } from "./schema";
+import pkg from "../package.json" with { type: "json" };
+import env from "./env.js";
+import createAuth from "./lib/auth.js";
+import { Password } from "./password.js";
+import { email, password } from "./schema/index.js";
 
 const signInBodySchema = z.object({
   email,

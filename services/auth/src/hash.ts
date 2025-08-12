@@ -1,6 +1,6 @@
 import { compare, genSalt, hash } from "bcrypt";
 import { ResultAsync } from "neverthrow";
-import { toError } from "./helpers";
+import { toError } from "./helpers.js";
 
 const safeCompare = ResultAsync.fromThrowable(
   (plainText: string, hash: string) => compare(plainText, hash),

@@ -1,6 +1,6 @@
 import { ResultAsync } from "neverthrow";
-import { Hash } from "./hash";
-import { toError } from "./helpers";
+import { Hash } from "./hash.js";
+import { toError } from "./helpers.js";
 
 export class Password {
   constructor(

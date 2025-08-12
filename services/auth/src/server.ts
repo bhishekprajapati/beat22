@@ -3,17 +3,17 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 import ms from "ms";
 import { nanoid } from "nanoid";
-import pino from "pino-http";
+import { pinoHttp } from "pino-http";
 import { omit } from "remeda";
 import z from "zod";
 
-import { allow, auth, signin, signout } from "./auth";
-import env from "./env";
-import { logger } from "./logger";
-import { prisma } from "./middlewares/prisma";
-import zValidate from "./middlewares/z-validate";
-import { Password } from "./password";
-import { email, password } from "./schema";
+import { allow, auth, signin, signout } from "./auth.js";
+import env from "./env.js";
+import { logger } from "./logger.js";
+import { prisma } from "./middlewares/prisma.js";
+import zValidate from "./middlewares/z-validate.js";
+import { Password } from "./password.js";
+import { email, password } from "./schema/index.js";
 
 logger.info("Initializing server...");
 
@@ -21,7 +21,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(pino({ logger }));
+app.use(pinoHttp({ logger }));
 app.use(prisma());
 app.use(auth());
 

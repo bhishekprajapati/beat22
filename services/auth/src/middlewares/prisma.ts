@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
 import { ResultAsync } from "neverthrow";
-import { toError } from "src/helpers";
-import { $db } from "../db";
-import type { ParamsDictionary } from "./helpers";
+import { $db } from "../db.js";
+import { toError } from "../helpers.js";
+import type { ParamsDictionary } from "./helpers.js";
 
 type TDatabaseClientState = ReturnType<typeof getDatabaseClientState>;
 function getDatabaseClientState() {

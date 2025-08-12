@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import type { ParamsDictionary } from "./helpers";
+import type { ParamsDictionary } from "./helpers.js";
 import { z, ZodError, ZodType } from "zod";
 
 type TZValidateOptions<TBodySchema = ZodType> = {

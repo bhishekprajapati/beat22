@@ -1,10 +1,13 @@
 import { CookieOptions, Request, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { sign as _sign, verify as _verify, Algorithm } from "jsonwebtoken";
+import type { Algorithm } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import ms from "ms";
 import { Result, ResultAsync } from "neverthrow";
-import { toError } from "../helpers";
-import { ParamsDictionary } from "../middlewares/helpers";
+import { toError } from "../helpers.js";
+import { ParamsDictionary } from "../middlewares/helpers.js";
+
+const { sign: _sign, verify: _verify } = jwt;
 
 type TJsonWebTokenStrategyOptions<TAudience> = {
   expiresIn: ms.StringValue;
@@ -78,10 +81,13 @@ function createAuth<TAudience extends [string, ...string[]]>(
   const AUTH_COOKIE_NAME = "auth_token";
 
   /** signin express handler */
-  const handleSigin: RequestHandler<ParamsDictionary, unknown, unknown> = (
-    req,
-    res,
-  ) => {
+  const handleSigin: RequestHandler<
+    ParamsDictionary,
+    unknown,
+    unknown,
+    unknown
+  > = (req, res) => {
+    // @ts-expect-error ...
     onSignin(req).match(
       (opts) => {
         jwt.sign(opts).match(
@@ -102,17 +108,24 @@ function createAuth<TAudience extends [string, ...string[]]>(
   };
 
   /** signout express handler */
-  const handleSignout: RequestHandler<ParamsDictionary, unknown, unknown> = (
-    _,
-    res,
-  ) => {
+  const handleSignout: RequestHandler<
+    ParamsDictionary,
+    unknown,
+    unknown,
+    unknown
+  > = (_, res) => {
     res.clearCookie(AUTH_COOKIE_NAME, {
       ...cookies,
     });
     res.sendStatus(StatusCodes.OK);
   };
 
-  const handleAuthParsingMiddleware = (): RequestHandler => {
+  const handleAuthParsingMiddleware = (): RequestHandler<
+    ParamsDictionary,
+    unknown,
+    unknown,
+    unknown
+  > => {
     return async function (req, _, next) {
       req.$auth = {
         session: null,
@@ -138,7 +151,7 @@ function createAuth<TAudience extends [string, ...string[]]>(
   type TAccess = "authenticated" | "public";
   const allow = (
     access: TAccess,
-  ): RequestHandler<ParamsDictionary, unknown, unknown> => {
+  ): RequestHandler<ParamsDictionary, unknown, unknown, unknown> => {
     return function middleware(req, res, next) {
       if (access === "authenticated" && !req.$auth?.session) {
         return res.sendStatus(StatusCodes.FORBIDDEN);
