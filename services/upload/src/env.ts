@@ -14,6 +14,8 @@ const schema = z.object({
   S3_CRED_ACCESS_KEY_ID: z.string().trim().nonempty(),
   S3_CRED_SECRET_ACCESS_KEY: z.string().trim().nonempty(),
   S3_FORCE_PATH_STYLE: z.coerce.boolean().default(true),
+  S3_BUCKET_NAME: z.string().trim().nonempty().default("media"),
+  S3_BUCKET_MAX_SIZE: z.string().trim().nonempty().default("50mb"),
 });
 
 const result = schema.safeParse(process.env);
