@@ -17,6 +17,7 @@ COPY pnpm-workspace.yaml  pnpm-workspace.yaml
 COPY turbo.json turbo.json
 COPY package.json package.json
 RUN echo "store-dir=/app/.pnpm-store" >> .npmrc
+# TODO prune other workspaces for production image build
 
 FROM root-setup AS workspace-setup
 LABEL org.opencontainers.image.source="https://github.com/bhishekprajapati/beat22"
