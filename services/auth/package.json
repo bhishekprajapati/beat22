@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "pnpm db:gen && tsx watch src/server.ts",
     "build": "tsc --build",
     "start": "pnpm build && node ./dist/server.js",
     "db:gen": "prisma generate"

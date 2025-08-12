@@ -1,0 +1,13 @@
+**/node_modules
+**/.pnpm-store
+
+**/*.md
+
+**/.env
+**/.env*
+**/.gitignore
+
+**/dist
+**/generated
+**/.tsbuildinfo
+**/tsconfig.tsbuildinfo

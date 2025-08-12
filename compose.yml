@@ -1,0 +1,20 @@
+services:
+  auth: 
+    build:
+      args:
+        - WORKSPACE_ROOT=services
+        - WORKSPACE_NAME=auth
+      context: .
+      dockerfile: ./Dockerfile
+    env_file: ./services/auth/.env
+    environment:
+      - SERVER_ADDRESS=0.0.0.0
+      - SERVER_PORT=8080
+    ports:
+      - 8080:8080
+    volumes:
+      - ./services/auth/src:/app/services/auth/src
+      - .pnpm-store:/app/.pnpm-store
+
+volumes:
+  .pnpm-store:
