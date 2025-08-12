@@ -17,7 +17,7 @@ const { handlers, middlewares } = createAuth({
     PRIVATE_KEY: env.AUTH_JWT_PRIVATE_KEY,
     PUBLIC_KEY_ID: env.AUTH_JWT_KEY_ID,
     algo: "HS256",
-    audience: ["service:auth", "service:upload"],
+    audience: ["service:auth", "service:files"],
     issuer: pkg.name,
     expiresIn: "1h",
   },
