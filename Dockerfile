@@ -24,7 +24,6 @@ LABEL org.opencontainers.image.source="https://github.com/bhishekprajapati/beat2
 ARG WORKSPACE_ROOT
 ARG WORKSPACE_NAME
 WORKDIR /app
-COPY ./packages ./packages
 COPY ./${WORKSPACE_ROOT}/${WORKSPACE_NAME} ./${WORKSPACE_ROOT}/${WORKSPACE_NAME}
 
 FROM workspace-setup AS runner

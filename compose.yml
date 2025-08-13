@@ -1,4 +1,16 @@
 services:
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+    ports:
+      - '3000:3000'
+    depends_on:
+      - files
+      - auth
+
   auth: 
     build:
       args:
