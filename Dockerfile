@@ -32,3 +32,5 @@ ENV WORKSPACE_NAME=${WORKSPACE_NAME}
 WORKDIR /app
 ENTRYPOINT [ "sh" ]
 CMD ["-c", "pnpm i && pnpm -F $WORKSPACE_NAME dev"]
+
+# this is a common docker file for both the services

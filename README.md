@@ -83,7 +83,7 @@ sudo docker compose logs -f
 ```
 
 Now, We're ready to interact with apis from postman.
-Watch the short demo video for postman workspace collections walk through.
+Watch the short demo [video](https://drive.google.com/file/d/1DU96MpwjgHU9-a7cHrlv1VACnsv8ubw7/view?usp=sharing) for postman workspace collections walk through.
 
 After finishing, tear down the local running infra
 

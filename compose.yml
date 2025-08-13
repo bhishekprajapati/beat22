@@ -50,6 +50,7 @@ services:
       - ./services/files/src:/app/services/files/src
       - .pnpm-store:/app/.pnpm-store
 
+  # this service is for local s3 development 
   minio:
     image: minio/minio:latest
     ports:

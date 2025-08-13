@@ -17,4 +17,8 @@ We have 2 workspace roots
 
 Both the services are working as intended but standalone. All 3 services are not yet wired up due to time constraints.
 
+In a wired up system, the `files` service relies on receiving user id from a trusted
+service by using http headers like `X-Uid`. This can be easily forwarded by the `auth`
+service to any downstream service to identify the user.
+
 As I don't have any previous experience in implementing auth in microservice environment that's why i need more time to think and come up with a solution.

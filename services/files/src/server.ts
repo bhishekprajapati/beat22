@@ -149,9 +149,6 @@ app.get("/", async (req, res) => {
     where: {
       ownerId,
     },
-    omit: {
-      ownerId: true,
-    },
   });
 
   return res.status(StatusCodes.OK).json({
