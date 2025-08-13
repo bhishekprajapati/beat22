@@ -74,6 +74,12 @@ const SUPPORTED_MIME_TYPES = new Set([
       ownerId = result.data;
     }
 
+    if (!req.body) {
+      res.status(StatusCodes.BAD_REQUEST);
+      res.statusMessage = "No file was provided";
+      return res.send();
+    }
+
     const key = s3Key();
     const type = await fileTypeFromBuffer(req.body);
 
