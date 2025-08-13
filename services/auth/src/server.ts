@@ -38,7 +38,8 @@ app.disable("x-powered-by");
           email,
           password,
         }),
-        onError(_, __, res) {
+        onError(err, __, res) {
+          logger.error(err);
           res.status(400).send();
         },
       },
@@ -66,7 +67,7 @@ app.disable("x-powered-by");
             name,
             email,
             hashedPassword: password.toString(),
-            isVerified: false,
+            isVerified: true,
             VerificationToken: {
               create: {
                 token,
@@ -78,12 +79,13 @@ app.disable("x-powered-by");
 
         res.send(omit(user, ["hashedPassword"]));
       }
-    },
+    }
   );
 }
 
 app.post("/signin", allow("public"), signin);
 app.post("/signout", allow("authenticated"), signout);
+app.get("/me", (req, res) => res.json(req.$auth.session));
 
 app.listen(env.SERVER_PORT, env.SERVER_ADDRESS, (error) => {
   if (error) {
