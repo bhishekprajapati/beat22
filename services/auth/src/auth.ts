@@ -41,8 +41,8 @@ const { handlers, middlewares } = createAuth({
 
       return {
         userId: user.id,
-        audience: ["service:auth", "service:upload"],
-        payload: JSON.stringify({}),
+        audience: ["service:auth", "service:files"],
+        payload: {},
       };
     }),
   },

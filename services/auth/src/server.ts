@@ -79,7 +79,7 @@ app.disable("x-powered-by");
 
         res.send(omit(user, ["hashedPassword"]));
       }
-    }
+    },
   );
 }
 

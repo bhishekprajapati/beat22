@@ -26,16 +26,16 @@ function createJwtStrategy<TAudience extends [string, ...string[]]>(
 
   type TSignOptions = {
     userId: string;
-    payload: Parameters<typeof _sign>[0];
+    payload: object;
     audience: typeof audience;
   };
 
-  const sign = Result.fromThrowable((opts: TSignOptions) => {
-    return _sign(opts.payload, PRIVATE_KEY, {
+  const sign = Result.fromThrowable((signOptions: TSignOptions) => {
+    return _sign(signOptions.payload, PRIVATE_KEY, {
       issuer,
       expiresIn,
       algorithm: algo,
-      subject: opts.userId,
+      subject: signOptions.userId,
       audience: opts.audience,
       keyid: PUBLIC_KEY_ID,
     });
@@ -66,7 +66,7 @@ type TAuthOptions<TAudience> = {
     onSignin: (
       req: Request,
     ) => ResultAsync<
-      { userId: string; payload: string; audience: TAudience },
+      { userId: string; payload: object; audience: TAudience },
       Error
     >;
   };
@@ -100,10 +100,10 @@ function createAuth<TAudience extends [string, ...string[]]>(
             });
             return res.sendStatus(StatusCodes.OK);
           },
-          () => res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR),
+          (err) => res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR),
         );
       },
-      () => res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR),
+      (err) => res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR),
     );
   };
 
