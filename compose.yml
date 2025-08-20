@@ -1,4 +1,14 @@
 services:
+  traefik:
+    image: traefik:v3.2
+    ports:
+      - 80:80
+      - 8080:8080
+    restart: unless-stopped
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   web:
     build:
       context: .
@@ -25,11 +35,16 @@ services:
       # only for development
       - AUTH_JWT_KEY_ID=26f8fdd64024c34c1268510d3dcab8f1
       - AUTH_JWT_PRIVATE_KEY=f14ceb56e9790f3cdf6ce4c251f07868975bc4ec414f171195098ccc91100f2b
-    ports:
-      - "8080:80"
     volumes:
       - ./services/auth/src:/app/services/auth/src
       - .pnpm-store:/app/.pnpm-store
+    labels:
+      traefik.enable: true
+      traefik.http.routers.auth.entrypoints: web
+      traefik.http.routers.auth.rule: PathPrefix(`/api/auth`)
+      traefik.http.services.auth.loadbalancer.server.port: 80
+      traefik.http.middlewares.auth-strip.stripprefix.prefixes: /api/auth
+      traefik.http.routers.auth.middlewares: auth-strip
 
   files: 
     build:
@@ -48,11 +63,16 @@ services:
       - S3_CRED_SECRET_ACCESS_KEY=minioadmin
       - S3_FORCE_PATH_STYLE=true
       - AUTH_SERVER_URL=http://auth
-    ports:
-      - "8081:80"
     volumes:
       - ./services/files/src:/app/services/files/src
       - .pnpm-store:/app/.pnpm-store
+    labels:
+      traefik.enable: true
+      traefik.http.routers.file.entrypoints: web
+      traefik.http.routers.file.rule: PathPrefix(`/api/files`)
+      traefik.http.services.file.loadbalancer.server.port: 80
+      traefik.http.middlewares.files-strip.stripprefix.prefixes: /api/files
+      traefik.http.routers.file.middlewares: files-strip
 
   # this service is for local s3 development 
   minio:
