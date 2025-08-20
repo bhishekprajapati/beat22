@@ -2,8 +2,8 @@ services:
   traefik:
     image: traefik:v3.2
     ports:
-      - 80:80
-      - 8080:8080
+      - 3000:80
+      - 8081:8080
     restart: unless-stopped
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
@@ -15,11 +15,14 @@ services:
       dockerfile: ./apps/web/Dockerfile
     volumes:
       - ./apps/web/src:/app/apps/web/src
-    ports:
-      - '3000:3000'
     depends_on:
       - files
       - auth
+    labels:
+      traefik.enable: true
+      traefik.http.routers.web-app.entrypoints: web
+      traefik.http.routers.web.rule: PathPrefix(`/`) && !PathPrefix(`/api/auth`) && !PathPrefix(`/api/files`)
+      traefik.http.services.web-app.loadbalancer.server.port: 3000
 
   auth:
     build:
