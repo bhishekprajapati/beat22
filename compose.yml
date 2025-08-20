@@ -71,11 +71,11 @@ services:
       - .pnpm-store:/app/.pnpm-store
     labels:
       traefik.enable: true
-      traefik.http.routers.file.entrypoints: web
-      traefik.http.routers.file.rule: PathPrefix(`/api/files`)
-      traefik.http.services.file.loadbalancer.server.port: 80
+      traefik.http.routers.files.entrypoints: web
+      traefik.http.routers.files.rule: PathPrefix(`/api/files`)
+      traefik.http.services.files.loadbalancer.server.port: 80
       traefik.http.middlewares.files-strip.stripprefix.prefixes: /api/files
-      traefik.http.routers.file.middlewares: files-strip
+      traefik.http.routers.files.middlewares: files-strip
 
 
   minio:
@@ -83,7 +83,6 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-      MINIO_SERVER_URL: http://localhost:3000
     command: server /data --console-address ":9001"
     ports:
       - 9000:9000

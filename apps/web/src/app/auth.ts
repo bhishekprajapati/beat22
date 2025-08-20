@@ -17,7 +17,6 @@ export async function getSession() {
     });
 
     const body = await res.json();
-    console.log("auth body", body);
 
     if (typeof body === "object" && body !== null) {
       const { userId } = body;
