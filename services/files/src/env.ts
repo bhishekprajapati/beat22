@@ -16,6 +16,7 @@ const schema = z.object({
   S3_FORCE_PATH_STYLE: z.coerce.boolean().default(true),
   S3_BUCKET_NAME: z.string().trim().nonempty().default("media"),
   S3_BUCKET_MAX_SIZE: z.string().trim().nonempty().default("50mb"),
+  AUTH_SERVER_URL: z.url().trim(),
 });
 
 const result = schema.safeParse(process.env);

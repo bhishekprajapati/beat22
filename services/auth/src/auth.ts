@@ -48,5 +48,5 @@ const { handlers, middlewares } = createAuth({
   },
 });
 
-export const { signin, signout } = handlers;
+export const { signin, signout, verify } = handlers;
 export const { allow, auth } = middlewares;

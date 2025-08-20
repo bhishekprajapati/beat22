@@ -280,6 +280,9 @@ importers:
       '@prisma/client':
         specifier: 6.13.0
         version: 6.13.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)
+      cookie-parser:
+        specifier: ^1.4.7
+        version: 1.4.7
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
@@ -314,6 +317,9 @@ importers:
         specifier: ^4.0.17
         version: 4.0.17
     devDependencies:
+      '@types/cookie-parser':
+        specifier: ^1.4.9
+        version: 1.4.9(@types/express@5.0.3)
       '@types/express':
         specifier: ^5.0.3
         version: 5.0.3

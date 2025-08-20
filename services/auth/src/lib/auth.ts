@@ -120,6 +120,34 @@ function createAuth<TAudience extends [string, ...string[]]>(
     res.sendStatus(StatusCodes.OK);
   };
 
+  const verifySession = (token: string): TSession | null => {
+    if (strategy === "jwt" && token) {
+      const session = jwt
+        .verify(token)
+        .map((t) => {
+          if (
+            typeof t === "object" &&
+            Object.hasOwn(t, "sub") &&
+            typeof t["sub"] === "string"
+          ) {
+            return {
+              userId: t.sub,
+            };
+          }
+
+          return null;
+        })
+        .match(
+          (session) => session,
+          (_) => null,
+        );
+
+      return session;
+    }
+
+    return null;
+  };
+
   const handleAuthParsingMiddleware = (): RequestHandler<
     ParamsDictionary,
     unknown,
@@ -132,20 +160,37 @@ function createAuth<TAudience extends [string, ...string[]]>(
       };
 
       const token = req.cookies[AUTH_COOKIE_NAME];
-      if (strategy === "jwt" && token) {
-        jwt.verify(token).map((t) => {
-          if (typeof t !== "string" && t.sub !== undefined) {
-            req.$auth = {
-              session: {
-                userId: t.sub,
-              },
-            };
-          }
-        });
+      const session = verifySession(token);
+
+      if (session) {
+        req.$auth = {
+          session,
+        };
       }
 
       next();
     };
+  };
+
+  const handleVerification: RequestHandler<
+    ParamsDictionary,
+    unknown,
+    unknown,
+    unknown
+  > = (req, res) => {
+    const token = req.headers["authorization"]?.split(" ").at(1);
+
+    if (!token || token.length === 0) {
+      return res.status(StatusCodes.UNAUTHORIZED).send();
+    }
+
+    const session = verifySession(token);
+
+    if (!session) {
+      return res.status(StatusCodes.UNAUTHORIZED).send();
+    }
+
+    return res.status(StatusCodes.OK).json(session);
   };
 
   type TAccess = "authenticated" | "public";
@@ -164,6 +209,7 @@ function createAuth<TAudience extends [string, ...string[]]>(
     handlers: {
       signin: handleSigin,
       signout: handleSignout,
+      verify: handleVerification,
     },
     middlewares: {
       auth: handleAuthParsingMiddleware,
@@ -172,12 +218,14 @@ function createAuth<TAudience extends [string, ...string[]]>(
   };
 }
 
+export type TSession = {
+  userId: string;
+};
+
 declare module "http" {
   interface IncomingMessage {
     $auth: {
-      session: {
-        userId: string;
-      } | null;
+      session: TSession | null;
     };
   }
 }

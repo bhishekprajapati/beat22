@@ -1,3 +1,5 @@
+# this is a common docker file for both the services
+
 ARG NODE_VERSION=20
 ARG PNPM_VERSION=9.0.0
 ARG WORKSPACE_ROOT
@@ -20,7 +22,6 @@ RUN echo "store-dir=/app/.pnpm-store" >> .npmrc
 # TODO prune other workspaces for production image build
 
 FROM root-setup AS workspace-setup
-LABEL org.opencontainers.image.source="https://github.com/bhishekprajapati/beat22"
 ARG WORKSPACE_ROOT
 ARG WORKSPACE_NAME
 WORKDIR /app
@@ -33,4 +34,3 @@ WORKDIR /app
 ENTRYPOINT [ "sh" ]
 CMD ["-c", "pnpm i && pnpm -F $WORKSPACE_NAME dev"]
 
-# this is a common docker file for both the services
