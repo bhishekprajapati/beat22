@@ -21,7 +21,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.web-app.entrypoints: web
-      traefik.http.routers.web.rule: PathPrefix(`/`) && !PathPrefix(`/api/auth`) && !PathPrefix(`/api/files`)
+      traefik.http.routers.web.rule: Host(`localhost`) && PathPrefix(`/`) && !PathPrefix(`/api/auth`) && !PathPrefix(`/api/files`)
       traefik.http.services.web-app.loadbalancer.server.port: 3000
 
   auth:
@@ -77,18 +77,19 @@ services:
       traefik.http.middlewares.files-strip.stripprefix.prefixes: /api/files
       traefik.http.routers.file.middlewares: files-strip
 
-  # this service is for local s3 development 
+
   minio:
     image: minio/minio:latest
-    ports:
-      - "9001:9001"
-      - "9000:9000"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_SERVER_URL: http://localhost:3000
     command: server /data --console-address ":9001"
+    ports:
+      - 9000:9000
+      - 9001:9001
     volumes:
-      - .minio-data:/data
+     - .minio-data:/data
 
 volumes:
   .minio-data:
