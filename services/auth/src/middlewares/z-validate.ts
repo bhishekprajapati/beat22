@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction, RequestHandler } from "express";
+import type { Request, Response, RequestHandler } from "express";
 import type { ParamsDictionary } from "./helpers.js";
 import { z, ZodError, ZodType } from "zod";
 
@@ -17,11 +17,7 @@ function zValidate<TBodySchema extends ZodType>(
   options: TZValidateOptions<TBodySchema>,
 ): RequestHandler<ParamsDictionary, unknown, z.infer<TBodySchema>> {
   const { body: bodyConfig } = options;
-  return async function validator(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
+  return async function validator(req, res, next) {
     const result = await bodyConfig.schema.safeParseAsync(req.body);
     if (!result.success) {
       return bodyConfig.onError(result.error, req, res);

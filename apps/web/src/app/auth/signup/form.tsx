@@ -7,23 +7,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export function SignupForm(props: React.ComponentProps<"div">) {
   const { className, ...rest } = props;
+  const router = useRouter();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     const body = Object.fromEntries(
-      new FormData(e.target as HTMLFormElement).entries()
+      new FormData(e.target as HTMLFormElement).entries(),
     );
 
     const res = await fetch("/api/auth/accounts", {
       method: "POST",
       body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     if (res.ok) {
-      console.log("success");
+      router.push("/", {});
+    } else {
+      console.error("failed to signup");
     }
   }
 

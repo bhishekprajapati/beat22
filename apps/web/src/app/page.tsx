@@ -1,9 +1,6 @@
-"use client";
-
 import Avatar from "boring-avatars";
-import useSession from "@/hooks/use-session";
-import { Button } from "@/components/ui/button";
-import { LogOut, Upload } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Upload } from "lucide-react";
 import {
   Dialog,
   DialogClose,
@@ -16,27 +13,31 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import FileList from "@/components/files/file-list";
+import { getSession } from "./auth";
+import Link from "next/link";
+import { SignoutButton } from "@/components/auth";
 
-export default function Home() {
-  const session = useSession();
+export default async function Home() {
+  const session = await getSession();
 
-  if (!session.isLoaded) {
-    return <>loading...</>;
-  }
-
-  if (!session.session) {
-    return <>please signin</>;
+  if (!session) {
+    return (
+      <div className="p-40">
+        <Link href="/auth/signin" className={buttonVariants({ size: "sm" })}>
+          SignIn
+        </Link>
+      </div>
+    );
   }
 
   return (
     <div className="p-4 max-w-md mx-auto">
       <div className="flex gap-2 mb-4">
         <Avatar
-          name={session.session.name}
+          name={session.userId}
           size={24}
           colors={undefined as unknown as string[]}
         />
-        <span>{session.session.name}</span>
         <span className="ms-auto" />
         <Dialog>
           <form>
@@ -65,12 +66,10 @@ export default function Home() {
             </DialogContent>
           </form>
         </Dialog>
-        <Button variant="outline" size="icon">
-          <LogOut size={20} />
-        </Button>
+        <SignoutButton />
       </div>
 
-      <FileList userId={session.session.userId} />
+      <FileList userId={session.userId} />
     </div>
   );
 }
