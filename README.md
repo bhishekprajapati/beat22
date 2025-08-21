@@ -1,3 +1,7 @@
+# Architecture
+
+![Architecture Diagram](./diagram.png)
+
 I'll be using bash for running the commands as I'm on debian linux. If you're are on windows you can either use WSL or find the equivalent commands on your own and same for the mac os.
 
 ## Installation
@@ -59,12 +63,6 @@ Other environment variables are optional and provided by docker compose file and
 
 You can check `~/services/auth/srv/env.ts` and `~/services/files/srv/env.ts` files to see all the environment variables.
 
-## Postman Workspace
-
-Due to time constraints i haven't wired up the UI. Though, It's almost done.
-
-In order to test the apis locally. Clone the postman workspace from [here](https://www.postman.com/gold-crescent-532919/workspace/beat22)
-
 ## Run the local infra
 
 Now, We are ready to start our local infra setup.
@@ -82,11 +80,22 @@ Wait until all the containers finshes building and running. Once that's done. th
 sudo docker compose logs -f
 ```
 
-Now, We're ready to interact with apis from postman.
-Watch the short demo [video](https://drive.google.com/file/d/1DU96MpwjgHU9-a7cHrlv1VACnsv8ubw7/view?usp=sharing) for postman workspace collections walk through.
-
 After finishing, tear down the local running infra
 
 ```bash
 sudo docker compose down
 ```
+
+## How to test the system?
+
+1. You can test using ui running on `localhost:3000`.
+
+**NOTE**: While signing up for a new account, make sure to choose a password of min length 16 and max length of 20.
+
+[👉🏻 Demo video](https://drive.google.com/file/d/1URgiCdnI-pgdiRhM_l0MJD8iwEtsJ-6q/view?usp=sharing)
+
+2. Using postman
+
+Clone the postman workspace from [here](https://www.postman.com/gold-crescent-532919/workspace/beat22)
+
+[👉🏻 Demo video](https://drive.google.com/file/d/1DU96MpwjgHU9-a7cHrlv1VACnsv8ubw7/view?usp=sharing)
